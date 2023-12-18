@@ -5,6 +5,7 @@ Pkg.activate(".")
 Pkg.instantiate()
 
 using LinearAlgebra
+using OpenAI
 using Glob
 
 function cosine_distance(v1, v2)
@@ -84,6 +85,12 @@ function t32()
   B = rand(numType, 10000, 10000)
   C = Array{numType,2}(undef, 10000, 10000)
   @time C .= A .* B
+end
+
+function get_embeddings()
+  r = create_embeddings(ENV[""], "Testing query for embeddings")
+  emb_query_json = r.response["data"][begin]["embedding"]
+  return Array(map(Float64, emb_query_json))  # should pass a typevar
 end
 
 println("**** Starting run")
